@@ -1,61 +1,51 @@
-/* eslint-disable prettier/prettier */
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put } from '@nestjs/common';
-import { UsuarioCreateDto } from './Dto/Create-usuario.dto';
-import { UsuarioPutDto } from './Dto/Put-usuario.dto';
-import { UsuarioPatchDto } from './Dto/Patch-usuario.dto';
+import { UsuarioDto } from './Dto/usuario.Dto';
+import { UsuarioService } from './usuario.service';
 
 @Controller('usuarios')
 export class UsuarioController {
 
+  constructor(private readonly usuarioService: UsuarioService) { }
+
   @Post()
-  async criar(@Body() {name,email,password}: UsuarioCreateDto) {
-    return {name,email,password} ;
+  async criar(@Body() data: UsuarioDto) {
+    return this.usuarioService.create(data);
   }
 
   @Get()
-  async list(){
-    return {usuarios: []}
+  async list() {
+    return this.usuarioService.list();
   }
 
   @Get(":id")
-  async show(@Param("id", ParseIntPipe) id:number){
-    return { usuario:{}, id}
+  async show(@Param("id", ParseIntPipe) id: number) {
+    return this.usuarioService.GetOne(id)
 
   }
 
   @Put(':id')
-  async update(@Body() {name,email,password}:UsuarioPutDto,@Param("id", ParseIntPipe) id:number){
+  async update(@Body() { name, email, password }: UsuarioDto, @Param("id", ParseIntPipe) id: number) {
     return {
       method: 'Put',
-      name,email,password,
+      name, email, password,
       id
     }
   }
 
   @Patch(':id')
-  async updatePartial(@Body() {name,email,password}:UsuarioPatchDto, @Param("id", ParseIntPipe) id:number){
+  async updatePartial(@Body() { name, email, password }: UsuarioDto, @Param("id", ParseIntPipe) id: number) {
     return {
       method: 'Patch',
-      name,email,password,
+      name, email, password,
       id
     }
   }
 
   @Delete(':id')
-  async delete(@Param("id", ParseIntPipe) id:number){
-    return{
+  async delete(@Param("id", ParseIntPipe) id: number) {
+    return {
       id
     }
   }
-
-
-
-
-
-
-
-
-
-
 
 }
