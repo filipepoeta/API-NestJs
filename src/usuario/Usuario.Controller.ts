@@ -1,7 +1,9 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, UseInterceptors } from '@nestjs/common';
+import { LogInterceptor } from 'src/interceptors/log.interceptor';
 import { UsuarioDto } from './Dto/usuario.Dto';
 import { UsuarioService } from './usuario.service';
 
+@UseInterceptors(LogInterceptor)
 @Controller('usuarios')
 export class UsuarioController {
 
@@ -24,28 +26,21 @@ export class UsuarioController {
   }
 
   @Put(':id')
-  async update(@Body() { name, email, password }: UsuarioDto, @Param("id", ParseIntPipe) id: number) {
-    return {
-      method: 'Put',
-      name, email, password,
-      id
-    }
+  async update(@Body() data: UsuarioDto, @Param("id", ParseIntPipe) id: number) {
+    return this.usuarioService.update(id, data)
   }
 
   @Patch(':id')
-  async updatePartial(@Body() { name, email, password }: UsuarioDto, @Param("id", ParseIntPipe) id: number) {
-    return {
-      method: 'Patch',
-      name, email, password,
-      id
-    }
+  async updatePartial(@Body() data: UsuarioDto, @Param("id", ParseIntPipe) id: number) {
+    return this.usuarioService.updatePartial(id, data)
   }
 
   @Delete(':id')
   async delete(@Param("id", ParseIntPipe) id: number) {
-    return {
-      id
-    }
+    return this.usuarioService.delete(id)
+
   }
+
+
 
 }

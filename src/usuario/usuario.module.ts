@@ -1,5 +1,5 @@
-/* eslint-disable prettier/prettier */
-import { Module } from "@nestjs/common";
+import { UsuarioIdCheckMiddleware } from './../middleware/usuario-id-check.middleware';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from "@nestjs/common";
 import { UsuarioController } from "./Usuario.Controller";
 import { UsuarioService } from "./usuario.service";
 import { PrismaModule } from "src/prisma/prisma.module";
@@ -8,6 +8,13 @@ import { PrismaModule } from "src/prisma/prisma.module";
   imports: [PrismaModule],
   controllers: [UsuarioController],
   providers: [UsuarioService],
-  exports:[]
+  exports: []
 })
-export class UsuarioModule {}
+export class UsuarioModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(UsuarioIdCheckMiddleware).forRoutes({
+      path: 'usuarios/:id',
+      method: RequestMethod.ALL
+    })
+  }
+}
