@@ -8,7 +8,7 @@ import { PrismaModule } from "src/prisma/prisma.module";
   imports: [PrismaModule],
   controllers: [UsuarioController],
   providers: [UsuarioService],
-  exports: []
+  exports: [UsuarioService]
 })
 export class UsuarioModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
